@@ -5,7 +5,7 @@ import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
 import AddIcon from '@material-ui/icons/Add';
-import RegisterLabModal from './RegisterLabModal';
+import LabFormDialog from './LabFormDialog';
 import styles from '../styles/styles';
 
 class RegisterLab extends Component {
@@ -32,7 +32,8 @@ class RegisterLab extends Component {
             <Typography color='textSecondary' style={{textAlign: 'center'}}>
               Record lab work and set corresponding alerts.
             </Typography>
-            <RegisterLabModal 
+            <LabFormDialog 
+              title='New record'
               open={this.state.open}
               toggleDialog={this.toggleDialog}
             />

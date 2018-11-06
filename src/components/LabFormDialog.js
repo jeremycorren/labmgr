@@ -11,29 +11,56 @@ import Checkbox from '@material-ui/core/Checkbox';
 import InputLabel from '@material-ui/core/InputLabel';
 import Select from '@material-ui/core/Select';
 import Button from '@material-ui/core/Button';
+import Utils from '../utils/utils';
 
-class RegisterLabModal extends Component {
+class LabFormDialog extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      patientName: '',
-      cbp: false,
-      bmp: false,
-      labTypes: new Set(),
-      alertTime: ''
+
+    const { labs, labId } = this.props;
+    let obj;
+  
+    this.lab = null;
+    if (labId) {
+      this.lab = labs.filter(lab => lab.id === labId)[0];
+      obj = Utils.labTypesToObj(this.lab.labTypes);
     }
 
-    this.registerLab = this.registerLab.bind(this);
+    this.state = {
+      patientName: this.lab ? this.lab.patientName : '',
+      cbp: this.lab ? obj.cbp : false,
+      bmp: this.lab ? obj.bmp : false,
+      labTypes: this.lab ? this.lab.labTypes : new Set(),
+      alertPeriod: this.lab ? this.lab.alertPeriod : 'sevenDays'
+    }
+
+    this.addLab = this.addLab.bind(this);
+    this.editLab = this.editLab.bind(this);
   }
 
-  registerLab() {
+  addLab() {
     this.props.dispatch({
       type: 'ADD_LAB',
       patientName: this.state.patientName,
       labTypes: this.state.labTypes,
-      alertTime: this.state.alertTime
+      alertPeriod: this.state.alertPeriod
     });
+    this.cleanupForm();
+  }
 
+  editLab() {
+    this.props.dispatch({
+      type: 'EDIT_LAB',
+      id: this.lab.id,
+      patientName: this.state.patientName,
+      labTypes: this.state.labTypes,
+      alertPeriod: this.state.alertPeriod
+    });
+    this.props.clearRowsSelected();
+    this.cleanupForm();
+  }
+
+  cleanupForm() {
     this.props.toggleDialog();
 
     this.setState({
@@ -41,16 +68,17 @@ class RegisterLabModal extends Component {
       cbp: false,
       bmp: false,
       labTypes: new Set(),
-      alertTime: ''
+      alertPeriod: ''
     });
   }
 
   selectLabType(event, labType) {
     this.setState({ [labType]: event.target.checked }, () => {
       if (this.state[labType]) {
-        this.setState({ labTypes: this.state.labTypes.add(labType) })
+        this.setState({ labTypes: this.state.labTypes.add(labType) });
       } else {
-        this.setState({ labTypes: this.state.labTypes.delete(labType) })
+        this.state.labTypes.delete(labType);
+        this.setState({ labTypes: this.state.labTypes });
       }
     });
   }
@@ -62,7 +90,7 @@ class RegisterLabModal extends Component {
         onClose={this.props.toggleDialog}
         aria-labelledby="form-dialog-title"
       >
-        <DialogTitle id="form-dialog-title">Register</DialogTitle>
+        <DialogTitle id="form-dialog-title">{this.props.title}</DialogTitle>
         <DialogContent>
           <form style={{display: 'flex', flexDirection: 'column'}}>
             <TextField //TODO: autocomplete based on existing patients; register patients separately.
@@ -96,8 +124,8 @@ class RegisterLabModal extends Component {
               <InputLabel>Alert in</InputLabel>
               <Select
                 native
-                value={this.state.alertTime}
-                onChange={event => this.setState({ alertTime: event.target.value })}
+                value={this.state.alertPeriod}
+                onChange={event => this.setState({ alertPeriod: event.target.value })}
               >
                 <option value={''}></option>
                 <option value={'sevenDays'}>1 week</option>
@@ -108,9 +136,9 @@ class RegisterLabModal extends Component {
               <Button 
                 variant='contained'
                 color='primary'
-                onClick={this.registerLab}
+                onClick={this.lab ? this.editLab : this.addLab}
               >
-                Register
+                Submit
               </Button>
             </FormControl>
           </form>
@@ -120,4 +148,10 @@ class RegisterLabModal extends Component {
   }
 }
 
-export default connect()(RegisterLabModal);
+const mapStateToProps = (state) => { 
+  return {
+    labs: state.labs
+  };
+};
+
+export default connect(mapStateToProps)(LabFormDialog);

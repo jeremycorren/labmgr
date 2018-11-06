@@ -9,6 +9,7 @@ import TableRow from '@material-ui/core/TableRow';
 import Checkbox from '@material-ui/core/Checkbox';
 import LabTableToolbar from './LabTableToolbar';
 import styles from '../styles/styles';
+import Utils from '../utils/utils';
 
 class LabTable extends Component {
   constructor(props) {
@@ -33,12 +34,6 @@ class LabTable extends Component {
     this.setState({ rowsSelected: [] });
   }
 
-  labTypesToCsv(labTypes) {
-    return Array.from(labTypes)
-      .map((lab) => lab.toUpperCase())
-      .join(", ");
-  }
-
   render() {
     const { labs } = this.props;
     if (labs.length < 1) {
@@ -54,9 +49,10 @@ class LabTable extends Component {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell><Checkbox /></TableCell>
+                <TableCell></TableCell>
                 <TableCell>Patient Name</TableCell>
                 <TableCell>Create Date</TableCell>
+                <TableCell>Status</TableCell>
                 <TableCell>Labs</TableCell>
                 <TableCell>Alert Date</TableCell>
               </TableRow>
@@ -67,7 +63,7 @@ class LabTable extends Component {
                   <TableRow key={lab.id}>
                     <TableCell>
                       <Checkbox 
-                        checked={this.state.rowsSelected[lab.id]} 
+                        checked={this.state.rowsSelected[lab.id] === true} 
                         onChange={event => {
                           const rowsSelected = this.state.rowsSelected;
                           rowsSelected[lab.id] = event.target.checked;
@@ -76,9 +72,10 @@ class LabTable extends Component {
                       />
                     </TableCell>
                     <TableCell>{lab.patientName}</TableCell>
-                    <TableCell>{lab.createTimestamp}</TableCell>
-                    <TableCell>{this.labTypesToCsv(lab.labTypes)}</TableCell>
-                    <TableCell>{lab.alertDate}</TableCell>
+                    <TableCell>{lab.createTimestamp.format('dddd, MMM Do YYYY')}</TableCell>
+                    <TableCell>{lab.status}</TableCell>
+                    <TableCell>{Utils.labTypesToCsv(lab.labTypes)}</TableCell>
+                    <TableCell>{Utils.getAlertDate(lab.createTimestamp, lab.alertPeriod)}</TableCell>
                   </TableRow>
                 );
               })}

@@ -6,36 +6,26 @@ const moment = require('moment');
 const labs = (state=[], action) => {
   switch (action.type) {
     case 'ADD_LAB':
-      const createTimestamp = moment();
       return [{
         id: uuid(),
         patientName: action.patientName,
-        createTimestamp: createTimestamp.format('dddd, MMM Do YYYY'),
+        createTimestamp: moment(),
+        status: 'Pending',
         labTypes: action.labTypes,
-        alertDate: getAlertDate(createTimestamp, action.alertTime)
+        alertPeriod: action.alertPeriod
       }, ...state];
+    case 'EDIT_LAB':
+      const idxToEdit = state.findIndex(lab => lab.id === action.id);
+      state[idxToEdit].patientName = action.patientName;
+      state[idxToEdit].labTypes = action.labTypes;
+      state[idxToEdit].alertPeriod = action.alertPeriod;
+      return [...state];
     case 'REMOVE_LABS':
       return state.filter(lab => !action.idsToRemove.includes(lab.id));
     default:
       return state;
   }
 }
-
-const getAlertDate = (createTimestamp, alertTime) => {
-  let numDays;
-  switch (alertTime) {
-    case 'sevenDays':
-    default:
-      numDays = 7;
-      break;
-    case 'fourteenDays':
-      numDays = 14;
-      break;
-  }
-  return createTimestamp
-    .add(numDays, 'days')
-    .format('dddd, MMM Do YYYY');
-};
 
 const reducer = combineReducers({ labs });
 
