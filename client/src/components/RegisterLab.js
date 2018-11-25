@@ -33,7 +33,7 @@ class RegisterLab extends Component {
               Record lab work and set corresponding alerts.
             </Typography>
             <LabFormDialog 
-              title='New record'
+              title='Add Record'
               open={this.state.open}
               toggleDialog={this.toggleDialog}
             />
@@ -49,7 +49,6 @@ class RegisterLab extends Component {
             </Button>
           </CardActions>
         </Card>
-        
       </div>
     );  
   }

@@ -6,7 +6,7 @@ import Typography from '@material-ui/core/Typography';
 const Header = () => (
   <AppBar 
     position='relative' 
-    color='default'
+    color='primary'
   >
     <Toolbar>
       <Typography variant='h6' color="inherit">

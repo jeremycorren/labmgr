@@ -1,32 +1,18 @@
 {
-  "name": "lab-mgr",
-  "version": "0.1.0",
-  "private": true,
-  "dependencies": {
-    "@material-ui/core": "^3.3.2",
-    "@material-ui/icons": "^3.0.1",
-    "moment": "^2.22.2",
-    "react": "^16.6.0",
-    "react-dom": "^16.6.0",
-    "react-redux": "^5.1.0",
-    "react-scripts": "2.1.1",
-    "redux": "^4.0.1",
-    "redux-logger": "^3.0.6",
-    "uuidv4": "^2.0.0"
-  },
+  "name": "labs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "eslintConfig": {
-    "extends": "react-app"
-  },
-  "browserslist": [
-    ">0.2%",
-    "not dead",
-    "not ie <= 11",
-    "not op_mini all"
-  ]
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "express": "^4.16.4",
+    "moment": "^2.22.2",
+    "mongoose": "^5.3.13",
+    "nodemailer": "^4.7.0"
+  }
 }
