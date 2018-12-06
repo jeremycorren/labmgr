@@ -30,6 +30,14 @@ const Utils = {
     return obj;
   },
 
+  getUniquePatientNames: (labs) => {
+    const patientNames = new Set();
+    labs.forEach(lab => (
+      patientNames.add(lab.patient.firstName + ' ' + lab.patient.lastName)
+    ));
+    return Array.from(patientNames);
+  },
+
   calculateReminderTimestamp: (args) => {
     let numDays;
     switch (args.alertPeriod) {

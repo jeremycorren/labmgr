@@ -8,11 +8,12 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+import TableFooter from '@material-ui/core/TableFooter';
+import TablePagination from '@material-ui/core/TablePagination';
 import Checkbox from '@material-ui/core/Checkbox';
 import Chip from '@material-ui/core/Chip';
 import LabTableToolbar from './LabTableToolbar';
 import { withStyles } from '@material-ui/core/styles';
-import styles from '../styles/styles';
 import Utils from '../utils/utils';
 import * as actions from '../actions/actions';
 
@@ -21,7 +22,9 @@ class LabTable extends Component {
     super(props);
     this.moment = require('moment');
     this.state = {
-      rowsSelected: []
+      rowsSelected: [],
+      rowsPerPage: 5,
+      page: 0
     }
     this.clearRowsSelected = this.clearRowsSelected.bind(this);
   }
@@ -79,12 +82,17 @@ class LabTable extends Component {
       );
     }
     return (
-      <div style={styles.container}>
+      <div style={{
+        display: 'flex', 
+        flexDirection: 'row', 
+        justifyContent: 'center', 
+        alignItems: 'center',
+        margin: 20
+      }}>
         <Paper>
           <LabTableToolbar 
             rowsSelected={this.getSelectedRowIds()} 
             clearRowsSelected={this.clearRowsSelected}
-            filterLabs={this.filterLabs}
           />
           <Table>
             <TableHead>
@@ -98,7 +106,10 @@ class LabTable extends Component {
               </TableRow>
             </TableHead>
             <TableBody>
-              {visibleLabs.map(lab => {
+              {visibleLabs.slice(
+                  this.state.page * this.state.rowsPerPage, 
+                  this.state.page * this.state.rowsPerPage + this.state.rowsPerPage
+              ).map(lab => {
                 return (
                   <TableRow key={lab._id}>
                     <TableCell>
@@ -116,9 +127,10 @@ class LabTable extends Component {
                       <Chip 
                         label={lab.status}
                         className={classNames({
-                          [classes.colorPrimary]: lab.status === 'New',
-                          [classes.colorSecondary]: lab.status === 'Reminded',
-                          [classes.colorAction]: lab.status === 'Closed',
+                          [classes.colorNew]: lab.status === 'New',
+                          [classes.colorReminded]: lab.status === 'Reminded',
+                          [classes.colorClosed]: lab.status === 'Closed',
+                          [classes.colorRemindable]: lab.status === 'Remindable',
                           [classes.label]: true
                         })}
                       />
@@ -130,6 +142,17 @@ class LabTable extends Component {
                 );
               })}
             </TableBody>
+            <TableFooter>
+              <TableRow>
+                <TablePagination
+                  rowsPerPageOptions={[5]}
+                  rowsPerPage={this.state.rowsPerPage}
+                  count={visibleLabs.length}
+                  page={this.state.page}
+                  onChangePage={(event, page) => this.setState({ page: page })}
+                />
+              </TableRow>
+            </TableFooter>
           </Table>
         </Paper>
       </div>
@@ -138,13 +161,16 @@ class LabTable extends Component {
 }
 
 LabTable = withStyles({ 
-  colorPrimary: {
+  colorNew: {
     backgroundColor: '#607d8b'
   },
-  colorSecondary: {
+  colorRemindable: {
+    backgroundColor: '#9C27B0'
+  },
+  colorReminded: {
     backgroundColor: '#00bcd4',
   },
-  colorAction: {
+  colorClosed: {
     backgroundColor: '#4caf50'
   },
   label: {

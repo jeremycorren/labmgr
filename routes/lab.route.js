@@ -8,7 +8,9 @@ const moment = require('moment');
 const router = express.Router();
 
 router.get('/findLabs', (req, res) => {
-  Lab.find({}, (err, docs) => {
+  Lab.find({}).sort({
+    createTimestamp: -1
+  }).exec((err, docs) => {
     if (err) {
       res.status(400).send(err);
     } else {

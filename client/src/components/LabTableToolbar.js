@@ -4,7 +4,6 @@ import classNames from 'classnames';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
-import FilterListIcon from '@material-ui/icons/FilterList';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import CloseIcon from '@material-ui/icons/Close';
 import SendIcon from '@material-ui/icons/Send';
@@ -15,7 +14,7 @@ import { withStyles } from '@material-ui/core/styles';
 import LabFormDialog from './LabFormDialog';
 import RemindLabDialog from './RemindLabDialog';
 import RemoveLabDialog from './RemoveLabDialog';
-import FilterLabsDialog from './FilterLabsDialog';
+import FilterLabs from './FilterLabs';
 import TransitionLabDialog from './TransitionLabDialog';
 import * as actions from '../actions/actions';
 
@@ -151,20 +150,7 @@ class LabTableToolbar extends Component {
                 removeLabs={this.removeLabs}
               />
             </div>
-            ) : (
-            <div>
-              <Tooltip title='Filter'>
-                <IconButton onClick={this.toggleFilterLabsDialog}>
-                  <FilterListIcon />
-                </IconButton>
-              </Tooltip>
-              <FilterLabsDialog
-                open={this.state.filterLabsDialogOpen}
-                toggleDialog={this.toggleFilterLabsDialog}
-                filterLabs={filterLabs}
-              />
-            </div>
-            )
+            ) : <FilterLabs filterLabs={filterLabs} />
           }
       </Toolbar>
     );

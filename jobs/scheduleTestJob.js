@@ -1,12 +1,14 @@
 const cron = require('node-schedule');
-const transporter = require('../email/transporter');
 const Lab = require('../models/lab.model');
-const nodemailer = require('nodemailer');
 
 let job = () => {
-  console.log("EXECUTED");
-  Lab.where({reminderTimestamp : {$lte : new Date()}, status : {$nin : ['Closed', 'Remindable']}})
-    .updateMany({status : "Remindable", updateTimestamp : new Date()}, (err, docs) => {
+  Lab.where({
+    reminderTimestamp: { $lte : new Date() }, 
+    status: { $nin : ['Closed', 'Remindable'] } 
+  }).updateMany({ 
+    status: 'Remindable', 
+    updateTimestamp: new Date() 
+  }, (err, docs) => {
       if (err) {
         console.log(err);
       } else {
