@@ -114,7 +114,7 @@ router.post('/remindLab/:id', (req, res) => {
           res.status(400).send(err);
         } else {
           lab.reminderCount = ++lab.reminderCount;
-          lab.reminderTimestamp = moment(lab.reminderTimestamp).add(14, 'days').toDate();
+          lab.reminderTimestamp = moment().add(14, 'days').toDate();
           lab.status = 'Reminded';
           lab.save((err) => {
             if (err) {
