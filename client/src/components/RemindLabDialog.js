@@ -7,6 +7,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import SendIcon from '@material-ui/icons/Send';
+import LabelOffIcon from '@material-ui/icons/LabelOff';
 import { withStyles } from '@material-ui/core/styles';
 import * as actions from '../actions/actions';
 import Utils from '../utils/utils';
@@ -24,12 +25,17 @@ class RemindLabDialog extends Component {
     }
 
     this.remindLab = this.remindLab.bind(this);
-    this.toggleDialog = this.remindLab.bind(this);
+    this.incompleteLab = this.incompleteLab.bind(this);
   }
 
   remindLab() {
     this.setState({ sentEmail: true });
     this.props.remindLab(this.props.lab._id);
+  }
+
+  incompleteLab() {
+    this.props.incompleteLab(this.props.lab._id);
+    this.props.toggleDialog();
   }
 
   render() {
@@ -61,7 +67,17 @@ class RemindLabDialog extends Component {
                     </li>
                   ))}</ul>
                 </span>
-                <Typography variant='body1'>Would you like to send an email reminder to <b>{lab.patient.firstName}</b>?</Typography>
+                <Typography variant='body1' style={{marginBottom: 20}}>
+                  Click <b>Send</b> to send an email reminder to {lab.patient.firstName}. <br/><br/>
+                  {
+                    lab.reminderCount >= 0 ? (
+                      <span>
+                        <em>Note:</em> You have already reminded {lab.patient.firstName} <b>{lab.reminderCount}</b> time(s). <br/><br/>
+                        Mark <b>Incomplete</b> if you would like to stop <br/> tracking this lab for reminders. <br/>
+                      </span>
+                    ) : <span></span>
+                  }
+                </Typography>
               </div>
             )
           }
@@ -77,7 +93,7 @@ class RemindLabDialog extends Component {
                 onClick={this.props.toggleDialog}
                 className={classes.button}
               >
-                Cancel
+                Exit
               </Button>
               <Button 
                 variant='contained'
@@ -87,6 +103,15 @@ class RemindLabDialog extends Component {
               >
                 Send
                 <SendIcon className={classes.rightIcon} />
+              </Button>
+              <Button
+                variant='contained'
+                color='primary'
+                onClick={this.incompleteLab}
+                className={classes.button}
+              >
+                Incomplete
+                <LabelOffIcon className={classes.rightIcon} />
               </Button>
             </div>
           ) : isSendingEmail && this.state.sentEmail ? (

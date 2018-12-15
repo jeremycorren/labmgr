@@ -3,9 +3,9 @@ import { connect } from 'react-redux';
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import Select from '@material-ui/core/Select';
-import TextField from '@material-ui/core/TextField';
 import Chip from '@material-ui/core/Chip';
 import Utils from '../utils/utils';
+import Constants from '../utils/constants';
 
 class FilterLabs extends Component {
   constructor(props) {
@@ -45,8 +45,14 @@ class FilterLabs extends Component {
             >
               <option value='' />
               {
-                ['New', 'Remindable', 'Reminded', 'Closed'].map(status => (
-                  <option value={status}>{status}</option>
+                [
+                  Constants.Status.NEW, 
+                  Constants.Status.REMINDABLE, 
+                  Constants.Status.REMINDED,
+                  Constants.Status.COMPLETE,
+                  Constants.Status.INCOMPLETE
+                ].map((status, idx) => (
+                  <option key={idx} value={status}>{status}</option>
                 ))
               }
             </Select>
@@ -66,8 +72,8 @@ class FilterLabs extends Component {
             >
               <option value='' />
               {
-                Utils.getUniquePatientNames(this.props.labs).map(name => (
-                  <option value={name}>{name}</option>
+                Utils.getUniquePatientNames(this.props.labs).map((name, idx) => (
+                  <option key={idx} value={name}>{name}</option>
                 ))
               }
             </Select>

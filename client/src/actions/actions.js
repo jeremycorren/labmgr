@@ -112,6 +112,22 @@ export const closeLab = (labId) => {
   return fn;
 }
 
+export const incompleteLab = (labId) => {
+  const fn = (dispatch) => {
+    dispatch({ type: 'INCOMPLETE_LAB_START' });
+    fetch('/labs/incompleteLab/' + labId, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' }
+    }).then(res => {
+      if (res.status === 200) {
+        dispatch({ type: 'INCOMPLETE_LAB_SUCCESS '});
+        dispatch(fetchLabs());
+      }
+    });
+  }
+  return fn;
+}
+
 export const removeLabs = (args) => {
   const fn = (dispatch) => {
     dispatch({ type: 'REMOVE_LABS_START '});

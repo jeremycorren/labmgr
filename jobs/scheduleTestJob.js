@@ -4,9 +4,12 @@ const Lab = require('../models/lab.model');
 let job = () => {
   Lab.where({
     reminderTimestamp: { $lte : new Date() }, 
-    status: { $nin : ['Closed', 'Remindable'] } 
+    status: { $nin: [
+      Constants.Status.COMPLETE, 
+      Constants.Status.REMINDABLE
+    ]}
   }).updateMany({ 
-    status: 'Remindable', 
+    status: Constants.Status.REMINDABLE, 
     updateTimestamp: new Date() 
   }, (err, docs) => {
       if (err) {

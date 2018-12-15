@@ -1,13 +1,17 @@
 const cron = require('node-schedule');
 const transporter = require('../email/transporter');
 const Lab = require('../models/lab.model');
+const Constants = require('../utils/constants');
 
 let notificationJob = () => {
   Lab.where({
-    reminderTimestamp : { $lte : new Date() }, 
-    status : { $nin : ['Closed', 'Remindable'] }
+    reminderTimestamp: { $lte: new Date() }, 
+    status: { $nin: [
+      Constants.Status.COMPLETE, 
+      Constants.Status.REMINDABLE
+    ]}
   }).updateMany({
-    status : 'Remindable', //redundant for Remindable. let's first fetch, then update/save.
+    status: Constants.Status.REMINDABLE, //redundant for Remindable. let's first fetch, then update/save.
     updateTimestamp : new Date() 
   }, (err, docs) => {
     if (err) {

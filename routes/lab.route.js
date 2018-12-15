@@ -4,6 +4,7 @@ const transporter = require('../email/transporter');
 const generateBody = require('../email/generateBody');
 const footer = require('../email/footer');
 const moment = require('moment');
+const Constants = require('../utils/constants');
 
 const router = express.Router();
 
@@ -87,12 +88,26 @@ router.put('/closeLab/:id', (req, res) => {
   Lab.findOneAndUpdate({
     _id: req.params.id
   }, {
-    status: 'Closed'
+    status: Constants.Status.COMPLETE
   }, (err) => {
     if (err) {
       res.status(400).send(err);
     } else {
-      res.status(200).send('Lab closed.');
+      res.status(200).send('Lab completed.');
+    }
+  });
+});
+
+router.put('/incompleteLab/:id', (req, res) => {
+  Lab.findOneAndUpdate({
+    _id: req.params.id
+  }, {
+    status: Constants.Status.INCOMPLETE
+  }, (err) => {
+    if (err) {
+      res.status(400).send(err);
+    } else {
+      res.status(200).send('Lab marked incomplete.');
     }
   });
 });

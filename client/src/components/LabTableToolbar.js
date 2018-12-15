@@ -17,6 +17,7 @@ import RemoveLabDialog from './RemoveLabDialog';
 import FilterLabs from './FilterLabs';
 import TransitionLabDialog from './TransitionLabDialog';
 import * as actions from '../actions/actions';
+import Constants from '../utils/constants';
 
 class LabTableToolbar extends Component {
   constructor(props) {
@@ -94,7 +95,11 @@ class LabTableToolbar extends Component {
         <div style={{flex: '1 1 50%'}}></div>
           {
             rowsSelected.length === 1 
-              && !['Closed', 'Reminded'].includes(this.getSelectedLab().status) ? (
+              && ![
+                  Constants.Status.COMPLETE, 
+                  Constants.Status.INCOMPLETE,
+                  Constants.Status.REMINDED
+                ].includes(this.getSelectedLab().status) ? (
                 <div>
                   <Tooltip title='Remind'>
                     <IconButton onClick={this.toggleRemindLabDialog}>
@@ -105,12 +110,13 @@ class LabTableToolbar extends Component {
                     open={this.state.remindLabDialogOpen}
                     toggleDialog={this.toggleRemindLabDialog}
                     remindLab={this.remindLab}
+                    incompleteLab={this.incompleteLab}
                     lab={this.getSelectedLab()}
                   />
                 </div>
               ) : <div></div>
           }
-          {rowsSelected.length === 1 && this.getSelectedLab().status !== 'Closed' ? (
+          {rowsSelected.length === 1 && this.getSelectedLab().status !== Constants.Status.COMPLETE ? (
             <div>
               <Tooltip title='Close'>
                 <IconButton onClick={this.toggleTransitionLabDialog}>

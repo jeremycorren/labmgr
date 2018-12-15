@@ -22,9 +22,9 @@ app.use('/labs', lab);
 const scheduleNotificationJob = require('./jobs/scheduleNotificationJob.js');
 scheduleNotificationJob();
 
-//TEST
-const scheduleTestJob = require('./jobs/scheduleTestJob.js');
-scheduleTestJob();
+// //TEST
+// const scheduleTestJob = require('./jobs/scheduleTestJob.js');
+// scheduleTestJob();
 
 app.listen(PORT, () => console.log('Server is listening on port ' + PORT));
 

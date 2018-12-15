@@ -15,6 +15,7 @@ import Chip from '@material-ui/core/Chip';
 import LabTableToolbar from './LabTableToolbar';
 import { withStyles } from '@material-ui/core/styles';
 import Utils from '../utils/utils';
+import Constants from '../utils/constants';
 import * as actions from '../actions/actions';
 
 class LabTable extends Component {
@@ -127,10 +128,11 @@ class LabTable extends Component {
                       <Chip 
                         label={lab.status}
                         className={classNames({
-                          [classes.colorNew]: lab.status === 'New',
-                          [classes.colorReminded]: lab.status === 'Reminded',
-                          [classes.colorClosed]: lab.status === 'Closed',
-                          [classes.colorRemindable]: lab.status === 'Remindable',
+                          [classes.colorNew]: lab.status === Constants.Status.NEW,
+                          [classes.colorReminded]: lab.status === Constants.Status.REMINDED,
+                          [classes.colorClosed]: lab.status === Constants.Status.COMPLETE,
+                          [classes.colorRemindable]: lab.status === Constants.Status.REMINDABLE,
+                          [classes.colorIncomplete]: lab.status === Constants.Status.INCOMPLETE,
                           [classes.label]: true
                         })}
                       />
@@ -172,6 +174,9 @@ LabTable = withStyles({
   },
   colorClosed: {
     backgroundColor: '#4caf50'
+  },
+  colorIncomplete: {
+    backgroundColor: '#757575'
   },
   label: {
     color: 'white'

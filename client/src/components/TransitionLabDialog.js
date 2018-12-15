@@ -32,7 +32,7 @@ class TransitionLabDialog extends Component {
             {
               <span>
                 <b>Close</b> a record only once a patient has completed their labwork. <br/><br/>
-                Once a record is <b>Closed</b>, you cannot send a <b>Reminder</b> about <br/> 
+                Once a record is <b>Complete</b>, you cannot send a <b>Reminder</b> about <br/> 
                 the record or <b>Edit</b> it.
               </span>
             }
