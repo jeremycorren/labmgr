@@ -70,7 +70,7 @@ class RemindLabDialog extends Component {
                 <Typography variant='body1' style={{marginBottom: 20}}>
                   Click <b>Send</b> to send an email reminder to {lab.patient.firstName}. <br/><br/>
                   {
-                    lab.reminderCount >= 0 ? (
+                    lab.reminderCount >= 2 ? (
                       <span>
                         <em>Note:</em> You have already reminded {lab.patient.firstName} <b>{lab.reminderCount}</b> time(s). <br/><br/>
                         Mark <b>Incomplete</b> if you would like to stop <br/> tracking this lab for reminders. <br/>
@@ -104,16 +104,20 @@ class RemindLabDialog extends Component {
                 Send
                 <SendIcon className={classes.rightIcon} />
               </Button>
-              <Button
-                variant='contained'
-                color='primary'
-                onClick={this.incompleteLab}
-                className={classes.button}
-              >
-                Incomplete
-                <LabelOffIcon className={classes.rightIcon} />
-              </Button>
-            </div>
+              {
+                lab.reminderCount >= 2 ? (
+                  <Button
+                    variant='contained'
+                    color='primary'
+                    onClick={this.incompleteLab}
+                    className={classes.button}
+                  >
+                  Incomplete
+                  <LabelOffIcon className={classes.rightIcon} />
+                  </Button>
+                ) : <span></span>
+              }
+            </div>          
           ) : isSendingEmail && this.state.sentEmail ? (
             <Button
               variant='contained'
